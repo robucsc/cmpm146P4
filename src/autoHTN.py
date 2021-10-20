@@ -27,6 +27,17 @@ def declare_methods (data):
 	# sort the recipes so that faster recipes go first
 
 	# your code here
+	method_list = []
+
+	# sort the json on input
+	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=False):
+		my_method = make_method(key, value)
+		method_list.append(my_method)
+		print(key, value)
+
+	# method_list.sort()
+	# sorted list of methods
+	# pyhop.declare_methods('foo', m, m)
 	# hint: call make_method, then declare the method to pyhop using pyhop.declare_methods('foo', m1, m2, ..., mk)	
 	pass			
 
@@ -78,10 +89,11 @@ if __name__ == '__main__':
 	rules_filename = 'crafting.json'
 
 	with open(rules_filename) as f:
-		data = json.load(f)
+		data = json.load(f) # returns a dict
+		# print(data.keys())
 
 	state = set_up_state(data, 'agent', time=239) # allot time here
-	goals = set_up_goals(data, 'agent')
+	goals = set_up_goals(data, 'agent')	# agent is the ID
 
 	declare_operators(data)
 	declare_methods(data)
