@@ -51,11 +51,11 @@ def op_wooden_axe_for_wood (state, ID):
 	return False
 # each of the operators are functions, this is a list of functions
 pyhop.declare_operators (op_punch_for_wood,
-						 op_craft_wooden_axe_at_bench,
-						 op_craft_plank,
-						 op_craft_stick,
-						 op_craft_bench,
-						 op_wooden_axe_for_wood)
+						op_craft_wooden_axe_at_bench,
+						op_craft_plank,
+						op_craft_stick,
+						op_craft_bench,
+						op_wooden_axe_for_wood)
 
 '''end operators'''
 
@@ -67,7 +67,7 @@ def produce_enough (state, ID, item, num):
 	return [('produce', ID, item), ('have_enough', ID, item, num)]
 
 def produce (state, ID, item):
-	if item == 'wood': 
+	if item == 'wood':
 		return [('produce_wood', ID)]
 	# your code here
 	elif item == 'stick':
@@ -75,6 +75,10 @@ def produce (state, ID, item):
 	elif item == 'plank':
 		return [('produce_plank', ID)]
 	elif item == 'bench':
+		if state.made_bench[ID] is True:
+			return False
+		else:
+			state.made_bench[ID] = True
 		return [('produce_bench', ID)]
 	elif item == 'wooden_axe':
 		# this check to make sure we're not making multiple axes
@@ -99,13 +103,13 @@ def craft_wooden_axe_at_bench (state, ID):
 
 # your code here
 def craft_plank (state, ID):
-	return [('op_craft_plank'), ID]
+	return [('have_enough', ID, 'wood', 1), ('op_craft_plank', ID)]
 
 def craft_stick (state, ID):
-	return [('op_craft_stick'), ID]
+	return [('have_enough', ID, 'plank', 2), ('op_craft_stick', ID)]
 
 def craft_bench (state, ID):
-	return [('op_craft_bench'), ID]
+	return [('have_enough', ID, 'plank', 4), ('op_craft_bench', ID)]
 
 def wooden_axe_for_wood (state, ID):
 	return [('have_enough', ID, 'wooden_axe', 1), ('op_wooden_axe_for_wood', ID)]
@@ -120,6 +124,7 @@ pyhop.declare_methods ('produce_wooden_axe', craft_wooden_axe_at_bench)
 
 # declare state
 state = pyhop.State('state')
+state.plank = {'agent': 0}
 state.stick = {'agent': 0}
 state.wood = {'agent': 0}
 state.time = {'agent': 46}
@@ -134,4 +139,4 @@ state.made_bench = {'agent': False}
 # pyhop.print_methods()
 
 # pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 1)], verbose=3)
-pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 12)], verbose=3)
+pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 12)], verbose=1)

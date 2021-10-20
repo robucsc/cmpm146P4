@@ -35,8 +35,12 @@ def declare_methods (data):
 		method_list.append(my_method)
 		print(key, value)
 
+	for key, value in method_list:
+
+		pyhop.declare_methods('produce_' + key, m, m)
 	# method_list.sort()
 	# sorted list of methods
+	# pyhop.declare_methods('have_enough', check_enough, produce_enough)
 	# pyhop.declare_methods('foo', m, m)
 	# hint: call make_method, then declare the method to pyhop using pyhop.declare_methods('foo', m1, m2, ..., mk)	
 	pass			
